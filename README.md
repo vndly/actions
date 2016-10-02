@@ -1,2 +1,2 @@
-# actions
+# Actions
 Android wear actions
