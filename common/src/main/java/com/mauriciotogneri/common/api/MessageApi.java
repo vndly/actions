@@ -29,9 +29,9 @@ public class MessageApi
             return new Message(nodeId, Paths.RESULT_ACTIONS, Serializer.serialize(elements));
         }
 
-        public static Message playAction(String nodeId, Action element)
+        public static Message playAction(String nodeId, Play play)
         {
-            return new Message(nodeId, Paths.RESULT_PLAY_ACTION, Serializer.serialize(element));
+            return new Message(nodeId, Paths.RESULT_PLAY_ACTION, Serializer.serialize(play));
         }
     }
 }

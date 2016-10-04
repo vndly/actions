@@ -15,6 +15,7 @@ import com.mauriciotogneri.common.api.Action;
 import com.mauriciotogneri.common.api.Message;
 import com.mauriciotogneri.common.api.MessageApi.Messages;
 import com.mauriciotogneri.common.api.MessageApi.Paths;
+import com.mauriciotogneri.common.api.Play;
 import com.mauriciotogneri.common.utils.Serializer;
 
 import java.io.File;
@@ -83,18 +84,18 @@ public class WearableService extends WearableListenerService
 
     private void playAction(byte[] data)
     {
-        Action action = Serializer.deserialize(data);
+        Play play = Serializer.deserialize(data);
 
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume / 2, AudioManager.FLAG_PLAY_SOUND);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(maxVolume * play.volume()), AudioManager.FLAG_PLAY_SOUND);
 
         MediaPlayer mediaPlayer = new MediaPlayer();
 
         try
         {
-            mediaPlayer.setDataSource(action.path());
+            mediaPlayer.setDataSource(play.action().path());
             mediaPlayer.prepare();
             mediaPlayer.start();
         }

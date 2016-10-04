@@ -10,6 +10,7 @@ import android.support.wearable.view.WearableListView.ClickListener;
 import android.support.wearable.view.WearableListView.ViewHolder;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.mauriciotogneri.actions.ActionAdapter.ActionViewHolder;
@@ -19,6 +20,7 @@ import com.mauriciotogneri.common.api.Action;
 import com.mauriciotogneri.common.api.Message;
 import com.mauriciotogneri.common.api.MessageApi.Messages;
 import com.mauriciotogneri.common.api.MessageApi.Paths;
+import com.mauriciotogneri.common.api.Play;
 import com.mauriciotogneri.common.utils.Serializer;
 
 import java.util.List;
@@ -29,7 +31,9 @@ public class MainActivity extends Activity implements WearableEvents
     private WearableConnectivity connectivity;
     private View progressBar;
     private WearableListView list;
+    private View volumeLayer;
     private ActionAdapter adapter;
+    private Action chosenAction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +56,33 @@ public class MainActivity extends Activity implements WearableEvents
     {
         progressBar = findViewById(R.id.progress_bar);
         list = (WearableListView) findViewById(R.id.list);
+        volumeLayer = findViewById(R.id.volume_layer);
 
+        findViewById(R.id.volume_50).setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (chosenAction != null)
+                {
+                    playAction(chosenAction, 50);
+                }
+            }
+        });
+
+        findViewById(R.id.volume_100).setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (chosenAction != null)
+                {
+                    playAction(chosenAction, 100);
+                }
+            }
+        });
+
+        volumeLayer.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         list.setVisibility(View.GONE);
 
@@ -64,8 +94,11 @@ public class MainActivity extends Activity implements WearableEvents
             @Override
             public void onClick(ViewHolder viewHolder)
             {
+                volumeLayer.setVisibility(View.VISIBLE);
+                list.setVisibility(View.GONE);
+
                 ActionViewHolder action = (ActionViewHolder) viewHolder;
-                playAction(action.get());
+                chosenAction = action.get();
             }
 
             @Override
@@ -78,9 +111,13 @@ public class MainActivity extends Activity implements WearableEvents
         connectivity.connect();
     }
 
-    private void playAction(Action action)
+    private void playAction(Action action, int volume)
     {
-        connectivity.sendMessage(Messages.playAction(nodeId, action));
+        connectivity.sendMessage(Messages.playAction(nodeId, new Play(action, volume)));
+
+        volumeLayer.setVisibility(View.GONE);
+        list.setVisibility(View.VISIBLE);
+        chosenAction = null;
     }
 
     private void display(List<Action> actions)
