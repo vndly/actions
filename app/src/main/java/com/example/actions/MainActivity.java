@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupButton(R.id.coffinShort, R.raw.coffin_short);
+        setupButton(R.id.coffinLong, R.raw.coffin_long);
+
         setupButton(R.id.sadTrombone, R.raw.sad_trombone);
         setupButton(R.id.badumts, R.raw.badumts);
 
