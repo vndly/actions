@@ -1,4 +1,5 @@
 import 'package:actions/main_state.dart';
+import 'package:actions/sound.dart';
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 
@@ -59,78 +60,44 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const HBox(5),
-              Button(
-                name: 'Button 1',
-                url:
-                    'https://cdn.freesound.org/previews/90/90137_1430216-lq.mp3',
-                state: state,
-              ),
-              Button(
-                name: 'Button 2',
-                url:
-                    'https://cdn.freesound.org/previews/340/340955_5858296-lq.mp3',
-                state: state,
-              ),
-              const HBox(5),
-            ],
+    return GridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 2,
+      padding: const EdgeInsets.all(10),
+      children: [
+        for (final Sound sound in state.list)
+          Button(
+            sound: sound,
+            state: state,
           ),
-          Row(
-            children: [
-              const HBox(5),
-              Button(
-                name: 'Button 3',
-                url:
-                    'https://cdn.freesound.org/previews/323/323077_5514134-lq.mp3',
-                state: state,
-              ),
-              Button(
-                name: 'Button 4',
-                url:
-                    'https://cdn.freesound.org/previews/395/395822_7509543-lq.mp3',
-                state: state,
-              ),
-              const HBox(5),
-            ],
-          )
-        ],
-      ),
+      ],
     );
   }
 }
 
 class Button extends StatelessWidget {
-  final String name;
-  final String url;
+  final Sound sound;
   final MainState state;
 
   const Button({
-    required this.name,
-    required this.url,
+    required this.sound,
     required this.state,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: Colors.blue,
-        margin: const EdgeInsets.all(10),
-        height: 60,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => state.onPlaySound(url),
-            child: Center(
-              child: Text(
-                name,
-                style: const TextStyle(color: Colors.white),
-              ),
+    return Container(
+      color: Colors.blue,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => state.onPlaySound(sound.url),
+          child: Center(
+            child: Text(
+              sound.name,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
