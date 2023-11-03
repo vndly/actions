@@ -14,17 +14,48 @@ class MainScreen extends StatelessWidget {
     return DarkStatusBar(
       child: Scaffold(
         body: SafeArea(
-          child: Buttons(state),
+          child: Content(state),
         ),
       ),
     );
   }
 }
 
-class Buttons extends StatelessWidget {
+class Content extends StatelessWidget {
   final MainState state;
 
-  const Buttons(this.state);
+  const Content(this.state);
+
+  @override
+  Widget build(BuildContext context) {
+    return StateProvider<MainState>(
+      state: state,
+      builder: (context, state) {
+        if (state.list.isEmpty) {
+          return const Loading();
+        } else {
+          return Body(state);
+        }
+      },
+    );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class Body extends StatelessWidget {
+  final MainState state;
+
+  const Body(this.state);
 
   @override
   Widget build(BuildContext context) {
