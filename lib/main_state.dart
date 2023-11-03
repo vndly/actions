@@ -3,8 +3,19 @@ import 'package:just_audio/just_audio.dart';
 
 class MainState extends BaseState {
   Future onPlaySound(String url) async {
-    final player = AudioPlayer(); // Create a player
-    await player.setUrl(url);
-    player.play();
+    try {
+      final AudioPlayer player = AudioPlayer(
+        audioLoadConfiguration: AudioLoadConfiguration(
+          androidLoadControl: AndroidLoadControl(
+            prioritizeTimeOverSizeThresholds: true,
+          ),
+        ),
+      );
+      await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+      //await player.setUrl(url);
+      await player.play();
+    } catch (e) {
+      print(e);
+    }
   }
 }
