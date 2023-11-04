@@ -31,7 +31,9 @@ class MainState extends BaseState {
   Future onPlaySound(String url) async {
     try {
       final AudioPlayer player = AudioPlayer();
-      await player.setUrl(url);
+      final LockCachingAudioSource audioSource =
+          LockCachingAudioSource(Uri.parse(url));
+      await player.setAudioSource(audioSource);
       await player.play();
     } catch (e) {
       print(e);
