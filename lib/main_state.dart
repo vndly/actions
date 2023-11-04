@@ -11,6 +11,8 @@ class MainState extends BaseState {
 
   @override
   Future onLoad() async {
+    VolumeController().setVolume(1);
+
     const String url =
         'https://script.google.com/macros/s/AKfycbxL2Aec3uLWKgDOTVnScUdi_C2rnXHQ0gqYruHeJ-J7j-UIouGydr6V82M1K2nD-896vA/exec';
 
@@ -24,7 +26,6 @@ class MainState extends BaseState {
       ));
     }
 
-    VolumeController().setVolume(1);
     notify();
   }
 
