@@ -4,6 +4,7 @@ import 'package:dafluta/dafluta.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 class MainState extends BaseState {
   final List<Sound> list = [];
@@ -23,20 +24,14 @@ class MainState extends BaseState {
       ));
     }
 
+    VolumeController().setVolume(1);
     notify();
   }
 
   Future onPlaySound(String url) async {
     try {
-      final AudioPlayer player = AudioPlayer(
-        audioLoadConfiguration: AudioLoadConfiguration(
-          androidLoadControl: AndroidLoadControl(
-            prioritizeTimeOverSizeThresholds: true,
-          ),
-        ),
-      );
-      await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
-      //await player.setUrl(url);
+      final AudioPlayer player = AudioPlayer();
+      await player.setUrl(url);
       await player.play();
     } catch (e) {
       print(e);
